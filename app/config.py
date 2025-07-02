@@ -9,11 +9,15 @@ class Config():
     TESTING = False
 
 class DevelopmentConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI') 
-    SECRET_KEY = os.getenv('SECRET_KEY')
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI') #postgres/psycopg::/sample
+    SECRET_KEY = os.getenv('SECRET_KEY')                #asdjnwe13emskd
     PERMANENT_SESSION_LIFETIME = timedelta(hours=24)
+    #---Session based---
+    SESSION_TYPE = 'sqlalchemy'
+    SESSION_SQLALCHEMY = create_engine(SQLALCHEMY_DATABASE_URI)
+    
 
-#psycopg2 config
+#psycopg config
 class PostgresDatabaseConfig():
     def __init__(self):
         #check .env
@@ -23,7 +27,7 @@ class PostgresDatabaseConfig():
         self.PORT = os.getenv('PORT')
         self.DATABASE_NAME = os.getenv('DATABASE_NAME')
 
-    #since psycopg2.connect accept keyword arguments, then you can use **.
+    #since psycopg.connect accept keyword arguments, then you can use **.
     def return_dict(self) -> dict:
         return {
             'host' : self.HOST,
